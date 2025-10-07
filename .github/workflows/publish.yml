@@ -41,3 +41,9 @@ jobs:
 
       - name: Build and publish package
         run: mvn -B clean deploy
+
+      - name: Increment version automatically
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          NEW_VERSION=$(echo $VERSION | awk -F. -v OFS=. '{$NF++;print}')
+          mvn versions:set -DnewVersion=$NEW_VERSION
